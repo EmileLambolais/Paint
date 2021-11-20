@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.io.*;
+import java.util.ArrayList;
 
 public class Window extends JFrame {
     public Window(String Title,int x,int y){ // Création du constructeur qui créé une fenêtre
@@ -23,7 +24,7 @@ public class Window extends JFrame {
             // Création du menu Fichier
             JMenu fichierMenu = new JMenu("Fichier"); // Création d'un nouveau menu File
             JMenuItem item = null;
-            item = new JMenuItem("Nouveau") ; // Création d'un item Nouveau
+            item = new JMenuItem("Nouveau"); // Création d'un item Nouveau
                 item.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
                     public void actionPerformed(ActionEvent e){
                         String nomFile = JOptionPane.showInputDialog(getParent(),"Entrez le nom du nouveau fichier", null);
@@ -44,31 +45,45 @@ public class Window extends JFrame {
                     });
             fichierMenu.add(item); // ajout de l'item Nouveau au menu Fichier
             fichierMenu.insertSeparator(1); // Ajout d'un séparateur entre les deux items
-            item = new JMenuItem("Ouvrir") ; // Création d'un item Ouvrir
-            fichierMenu.add(item); // On ajoute l'item Ouvrir dans le menu Fichier
+            JMenuItem itemOpen = new JMenuItem("Ouvrir") ; // Création d'un item Ouvrir
+                itemOpen.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
+                    public void actionPerformed(ActionEvent e){
+                        // JFileChooser selectionFichier = new JFileChooser("c:\\users\\emile\\iCloudDrive\\Documents\\01_ENSEA\\Cours\\2A 2021-2022\\01_Cours 2A 2021-2022\\Informatique Java\\Travaux Dirigés\\Projet Java");
+                        JFileChooser ouvertureFichier = new JFileChooser("/Users/emilelambolais/Library/Mobile Documents/com~apple~CloudDocs/Documents/01_ENSEA/Cours/2A 2021-2022/01_Cours 2A 2021-2022/Informatique Java/Travaux Dirigés/Projet Java");
+                        // ouvertureFichier.setFileFilter(new FileTypeFilter(".txt", "Text"));
+                        int result = ouvertureFichier.showOpenDialog(itemOpen);
+                        if (result == JFileChooser.APPROVE_OPTION) {
+                            try{
+                                String nomOuvertureFichier = ouvertureFichier.getSelectedFile().getAbsolutePath();
+                                dessin.openFile(nomOuvertureFichier);
+                            }
+                            catch (Exception e2){
+                                // JOptionPane.showMessageDialog(null, e2.getMessage());
+                            }
+                            // System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+                        }
+                    }
+                });
+            fichierMenu.add(itemOpen); // On ajoute l'item Ouvrir dans le menu Fichier
             JMenuItem itemSave = new JMenuItem("Sauvegarder") ; // Création d'un item Sauvegarder
                 itemSave.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
                     public void actionPerformed(ActionEvent e){
                         // JFileChooser selectionFichier = new JFileChooser("c:\\users\\emile\\iCloudDrive\\Documents\\01_ENSEA\\Cours\\2A 2021-2022\\01_Cours 2A 2021-2022\\Informatique Java\\Travaux Dirigés\\Projet Java");
                         JFileChooser selectionFichier = new JFileChooser("/Users/emilelambolais/Library/Mobile Documents/com~apple~CloudDocs/Documents/01_ENSEA/Cours/2A 2021-2022/01_Cours 2A 2021-2022/Informatique Java/Travaux Dirigés/Projet Java");
-                        selectionFichier.setFileFilter(new FileTypeFilter(".txt", "Text"));
-                        int result = selectionFichier.showSaveDialog(itemSave);
-                        if (result == JFileChooser.APPROVE_OPTION) {
-                            File fileToSave = selectionFichier.getSelectedFile();
-                            int i;
-                            try{
-                                FileWriter fw = new FileWriter(fileToSave.getPath());
-                                for (i=0 ; i<dessin.getListOfFigure().size() ; i++){
-                                    String content = dessin.getListOfFigure().get(i); // On parcourt tous les éléments de la listOfFigure et on les ajoute à un fichier texte
-                                    fw.write(content);
-                                }
-                                fw.flush();
-                                fw.close();
+                        int fenetre = selectionFichier.showSaveDialog(itemSave);
+                        try{
+                            ArrayList<Figure> liste = dessin.getListOfFigure();
+                            FileOutputStream fos = new FileOutputStream(selectionFichier.getSelectedFile());
+                            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+                            oos.write(liste.size());
+                            for (int i = 0; i < liste.size(); i++) {
+                                oos.writeObject(liste.get(i));
                             }
-                            catch (Exception e2){
-                                JOptionPane.showMessageDialog(null, e2.getMessage());
-                            }
-                            System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+                            oos.close();
+                        }
+                        catch (Exception e2){
+                           // System.out.println("Problemos");
                         }
                     }
                 });

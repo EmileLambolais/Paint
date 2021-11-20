@@ -10,13 +10,13 @@ public class Square extends Rectangle {
         super(px,px,c,point);
     }
 
-    public void setBoundingBox (int heightBB, int widthBB){
+    public void setBoundingBox (int widthBB, int heightBB){
         this.heightBB = heightBB;
         this.widthBB = heightBB;
     }
 
     @Override
-    public String toString() {
-        return "("+heightBB+","+widthBB+")"+point;
+    public void draw(Graphics g) {
+        super.draw(g);
     }
 }

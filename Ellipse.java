@@ -1,8 +1,8 @@
 import java.awt.*;
 
 public class Ellipse extends Figure{
-    public int length=0;
-    public int width=0;
+    public int width;
+    public int height;
     public int heightBB=0;
     public int widthBB=0;
     public Figure figure = null;
@@ -19,37 +19,34 @@ public class Ellipse extends Figure{
         super(c, p);
         setSemiAxisX(px);
         setSemiAxisY(py);
+        this.origin = p;
         this.setBoundingBox(px, py);
-        this.draw(null);
+        this.color = c;
     }
 
-    public void setBoundingBox (int heightBB, int widthBB){
+    public void setBoundingBox (int widthBB, int heightBB){
         this.heightBB = heightBB;
         this.widthBB = widthBB;
     }
 
-    public void setSemiAxisX(int length) {
-        this.length = length/2;
+    public void setSemiAxisX(int width) {
+        this.width = width;
     }
 
-    public void setSemiAxisY(int width) {
-        this.width = width/2;
-    }
-
-    public void draw (Graphics g){
-
-    }
-
-    public int getLength() {
-        return length;
+    public void setSemiAxisY(int height) {
+        this.height = height;
     }
 
     public int getWidth() {
         return width;
     }
 
+    public int getHeight() {
+        return height;
+    }
+
     @Override
-    public String toString() {
-        return "("+length+","+width+")"+" et d'origine "+point;
+    public void draw(Graphics g) {
+        g.fillOval(origin.getX(),origin.getY(),Math.abs(width),Math.abs(height));
     }
 }

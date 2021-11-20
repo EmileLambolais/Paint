@@ -5,8 +5,8 @@ public class Point {
     public static int totalNumberOfPoint;
 
     public Point(int X, int Y) { // Création du constructeur qui va permettre de créer tous types de points
-        this.X = X;
-        this.Y = Y;
+        setX(X);
+        setY(Y);
         totalNumberOfPoint++;
     }
 
@@ -21,6 +21,14 @@ public class Point {
 
     public int getY() {
         return Y;
+    }
+
+    public void setX(int x) {
+        this.X = x;
+    }
+
+    public void setY(int y) {
+        this.Y = y;
     }
 
     public void getTotalNumberOfPoint() {

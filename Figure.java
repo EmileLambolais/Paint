@@ -2,12 +2,12 @@ import java.awt.*;
 
 public abstract class Figure {
 
-    protected Color color;
-    public Point point;
+    public Color color;
+    public Point origin;
 
     public Figure(Color c, Point p){ // Constructeur pour l'objet "Figure" avec un point
         this.color = c;
-        this.point = p;
+        this.origin = p;
     }
 
     public Figure(Color c){ // Constructeur pour l'objet "Figure" avec uniquement la couleur
@@ -21,14 +21,10 @@ public abstract class Figure {
         return color;
     }
 
-    public Point getPoint() {
-        return point;
+    public Point getOrigin() {
+        return origin;
     }
 
-    @Override
-    public String toString() {
-        return "("+color+","+point+")";
-    }
 }
 
 
