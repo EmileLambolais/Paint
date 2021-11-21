@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class Rectangle extends Figure{
+public class Rectangle extends Figure {
 
     public int width;
     public int height;
@@ -44,6 +44,7 @@ public class Rectangle extends Figure{
 
     @Override
     public void draw(Graphics g) {
+        g.setColor(color);
         g.fillRect(origin.getX(),origin.getY(),Math.abs(width),Math.abs(height)); // Fonctionnement : Lors du relachement de la souris, on place l'origine au point "origine". De plus on définie la largeur et la hauteur en faisant l'abscisse du point fin - l'abscisse du point origine et de même pour les ordonnée.
     }
 }

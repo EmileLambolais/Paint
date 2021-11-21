@@ -27,40 +27,33 @@ public class Window extends JFrame {
             item = new JMenuItem("Nouveau"); // Création d'un item Nouveau
                 item.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
                     public void actionPerformed(ActionEvent e){
-                        String nomFile = JOptionPane.showInputDialog(getParent(),"Entrez le nom du nouveau fichier", null);
-                            try {
-                                File newFile = new File(nomFile);
-                                if (newFile.createNewFile()) {
-                                    System.out.println("Fichier créé: " + newFile.getName());
-                                } 
-                                else {
-                                    System.out.println("Fichier déjà existant.");
-                                }
-                            } 
-                            catch (IOException p) {
-                                System.out.println("Une erreur est apparue.");
-                                p.printStackTrace();
-                            }
-                        }
-                    });
+                        dessin.resetDrawing();
+                    }
+                });
             fichierMenu.add(item); // ajout de l'item Nouveau au menu Fichier
             fichierMenu.insertSeparator(1); // Ajout d'un séparateur entre les deux items
             JMenuItem itemOpen = new JMenuItem("Ouvrir") ; // Création d'un item Ouvrir
                 itemOpen.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
                     public void actionPerformed(ActionEvent e){
-                        // JFileChooser selectionFichier = new JFileChooser("c:\\users\\emile\\iCloudDrive\\Documents\\01_ENSEA\\Cours\\2A 2021-2022\\01_Cours 2A 2021-2022\\Informatique Java\\Travaux Dirigés\\Projet Java");
-                        JFileChooser ouvertureFichier = new JFileChooser("/Users/emilelambolais/Library/Mobile Documents/com~apple~CloudDocs/Documents/01_ENSEA/Cours/2A 2021-2022/01_Cours 2A 2021-2022/Informatique Java/Travaux Dirigés/Projet Java");
-                        // ouvertureFichier.setFileFilter(new FileTypeFilter(".txt", "Text"));
-                        int result = ouvertureFichier.showOpenDialog(itemOpen);
-                        if (result == JFileChooser.APPROVE_OPTION) {
-                            try{
-                                String nomOuvertureFichier = ouvertureFichier.getSelectedFile().getAbsolutePath();
-                                dessin.openFile(nomOuvertureFichier);
+                        JFileChooser openFile = new JFileChooser("/Users/emilelambolais/Library/Mobile Documents/com~apple~CloudDocs/Documents/01_ENSEA/Cours/2A 2021-2022/01_Cours 2A 2021-2022/Informatique Java/Travaux Dirigés/Projet Java");
+                        openFile.showOpenDialog(itemOpen);
+                        try{
+                            ArrayList<Figure> liste = new ArrayList<Figure>();
+                            String nameFile = openFile.getSelectedFile().getAbsolutePath();
+                            FileInputStream fis = new FileInputStream(nameFile);
+                            ObjectInputStream ois = new ObjectInputStream(fis);
+
+                            int numberOfFigure = ois.readInt();
+                            for (int i = 0; i < numberOfFigure; i++) {
+                                Figure figure = (Figure) ois.readObject();
+                                liste.add(figure);
                             }
-                            catch (Exception e2){
-                                // JOptionPane.showMessageDialog(null, e2.getMessage());
-                            }
-                            // System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+                            System.out.println(liste);
+                            dessin.openFile(liste);
+                            ois.close();
+                        }
+                        catch (Exception e2){
+                           e2.printStackTrace();
                         }
                     }
                 });
@@ -68,42 +61,43 @@ public class Window extends JFrame {
             JMenuItem itemSave = new JMenuItem("Sauvegarder") ; // Création d'un item Sauvegarder
                 itemSave.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
                     public void actionPerformed(ActionEvent e){
-                        // JFileChooser selectionFichier = new JFileChooser("c:\\users\\emile\\iCloudDrive\\Documents\\01_ENSEA\\Cours\\2A 2021-2022\\01_Cours 2A 2021-2022\\Informatique Java\\Travaux Dirigés\\Projet Java");
-                        JFileChooser selectionFichier = new JFileChooser("/Users/emilelambolais/Library/Mobile Documents/com~apple~CloudDocs/Documents/01_ENSEA/Cours/2A 2021-2022/01_Cours 2A 2021-2022/Informatique Java/Travaux Dirigés/Projet Java");
-                        int fenetre = selectionFichier.showSaveDialog(itemSave);
+                        JFileChooser saveFile = new JFileChooser("/Users/emilelambolais/Library/Mobile Documents/com~apple~CloudDocs/Documents/01_ENSEA/Cours/2A 2021-2022/01_Cours 2A 2021-2022/Informatique Java/Travaux Dirigés/Projet Java");
+                        saveFile.showSaveDialog(itemSave);
                         try{
-                            ArrayList<Figure> liste = dessin.getListOfFigure();
-                            FileOutputStream fos = new FileOutputStream(selectionFichier.getSelectedFile());
+                            ArrayList<Figure> liste = new ArrayList<Figure>();
+                            liste = dessin.getListOfFigure();
+                            String nameFile = saveFile.getSelectedFile().getAbsolutePath();
+                            FileOutputStream fos = new FileOutputStream(nameFile);
                             ObjectOutputStream oos = new ObjectOutputStream(fos);
 
-                            oos.write(liste.size());
+                            oos.writeInt(liste.size());
                             for (int i = 0; i < liste.size(); i++) {
                                 oos.writeObject(liste.get(i));
                             }
+                            // System.out.println(liste);
                             oos.close();
                         }
                         catch (Exception e2){
-                           // System.out.println("Problemos");
+                           e2.printStackTrace();
                         }
                     }
                 });
-            itemSave.setAccelerator(KeyStroke.getKeyStroke('S', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false));
+            itemSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
             fichierMenu.add(itemSave); // On ajoute l'item Ouvrir dans le menu Fichier
             fichierMenu.insertSeparator(4); // Ajout d'un séparateur entre les deux items
             item = new JMenuItem("Quitter") ; // Création d'un item Quitter
+                item.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
+                    public void actionPerformed(ActionEvent e){
+                        System.exit(0);
+                    }
+                });
             fichierMenu.add(item); // On ajoute l'item Ouvrir dans le menu Fichier
             menuBar.add(fichierMenu); // On ajoute du menu Fichier dans la barre de menu
 
             // Création du menu A Propos
             JMenu aproposMenu = new JMenu("À Propos"); // Création d'un nouveau menu A Propos
             JMenu aproposCreateur = new JMenu("Créateur"); // Création d'un nouveau sous menu Créateur
-            JButton buttonCreateur = new JButton("Entrer le nom du créateur"); // Création d'un bouton créateur pour renter le nom du créateur du programme
-                buttonCreateur.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
-                        public void actionPerformed(ActionEvent e){
-                            String nomCreateur = JOptionPane.showInputDialog(getParent(),"Quel est ton nom ?", null);
-                            buttonCreateur.setText(nomCreateur);
-                        }
-                    });
+            JMenuItem buttonCreateur = new JMenuItem("Emile LAMBOLAIS, ENSEA"); // Création d'un bouton créateur pour afficher le nom du créateur du programme
             aproposCreateur.add(buttonCreateur); // ajout de l'item Nouveau au sous menu
             aproposMenu.add(aproposCreateur); // ajout du sous menu au menu A Propos
             menuBar.add(aproposMenu); // On ajoute du menu A propos dans la barre de menu
@@ -115,6 +109,8 @@ public class Window extends JFrame {
             JButton buttonNoir = new JButton("Noir");
                 buttonNoir.setBackground(Color.black);
                 buttonNoir.setForeground(Color.white);
+                buttonNoir.setOpaque(true);
+                buttonNoir.setBorderPainted(false);
                 buttonNoir.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
                     public void actionPerformed(ActionEvent e){
                         dessin.setColor(Color.black); // On donne au dessin actuel la couleur noire
@@ -123,6 +119,8 @@ public class Window extends JFrame {
                 });
             JButton buttonRouge = new JButton("Rouge");
                 buttonRouge.setBackground(Color.red);
+                buttonRouge.setOpaque(true);
+                buttonRouge.setBorderPainted(false);
                 buttonRouge.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
                     public void actionPerformed(ActionEvent e){
                         dessin.setColor(Color.red);
@@ -131,6 +129,8 @@ public class Window extends JFrame {
                 });
             JButton buttonVert = new JButton("Vert");
                 buttonVert.setBackground(Color.green);
+                buttonVert.setOpaque(true);
+                buttonVert.setBorderPainted(false);
                 buttonVert.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
                     public void actionPerformed(ActionEvent e){
                         dessin.setColor(Color.green);
@@ -140,6 +140,8 @@ public class Window extends JFrame {
             JButton buttonBleu = new JButton("Bleu");
                 buttonBleu.setBackground(Color.blue);
                 buttonBleu.setForeground(Color.white);
+                buttonBleu.setOpaque(true);
+                buttonBleu.setBorderPainted(false);
                 buttonBleu.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
                     public void actionPerformed(ActionEvent e){
                         dessin.setColor(Color.blue);
@@ -162,6 +164,8 @@ public class Window extends JFrame {
                         });
             JButton buttonJaune = new JButton("Jaune");
                 buttonJaune.setBackground(Color.yellow);
+                buttonJaune.setOpaque(true);
+                buttonJaune.setBorderPainted(false);
                 buttonJaune.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
                     public void actionPerformed(ActionEvent e){
                         dessin.setColor(Color.yellow);
@@ -170,6 +174,8 @@ public class Window extends JFrame {
                 });
             JButton buttonRose = new JButton("Rose");
                 buttonRose.setBackground(Color.pink); 
+                buttonRose.setOpaque(true);
+                buttonRose.setBorderPainted(false);
                 buttonRose.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
                     public void actionPerformed(ActionEvent e){
                         dessin.setColor(Color.pink);
@@ -178,6 +184,8 @@ public class Window extends JFrame {
                 });
             JButton buttonMagenta = new JButton("Magenta");
                 buttonMagenta.setBackground(Color.magenta);
+                buttonMagenta.setOpaque(true);
+                buttonMagenta.setBorderPainted(false);
                 buttonMagenta.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
                     public void actionPerformed(ActionEvent e){
                         dessin.setColor(Color.magenta);
@@ -186,6 +194,8 @@ public class Window extends JFrame {
                 });
             JButton buttonOrange = new JButton("Orange");
                 buttonOrange.setBackground(Color.orange);
+                buttonOrange.setOpaque(true);
+                buttonOrange.setBorderPainted(false);
                 buttonOrange.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
                     public void actionPerformed(ActionEvent e){
                         dessin.setColor(Color.orange);
@@ -236,7 +246,7 @@ public class Window extends JFrame {
     }
 
     public static void main(String[] args) {
-        Window win = new Window("Paint",800,600);
+        new Window("Paint",800,600);
     }
 
 }

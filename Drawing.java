@@ -2,7 +2,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.event.*;
-import java.io.*;
 
 public class Drawing extends JPanel implements MouseInputListener {
     
@@ -19,37 +18,8 @@ public class Drawing extends JPanel implements MouseInputListener {
         this.addMouseMotionListener(this);
     }
 
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        for (int i = 0; i < listOfFigure.size(); i++) {
-            listOfFigure.get(i).draw(g);
-        }
-    }
-
     public ArrayList<Figure> getListOfFigure() {
         return listOfFigure;
-    }
-
-    public void openFile(String fileName) {
-        Graphics g = getGraphics(); 
-        try {
-            listOfFigure.clear();
-            System.out.println(listOfFigure);
-            FileInputStream fis = new FileInputStream(fileName);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            int numOfFigure = ois.readInt();
-            for (int i = 0; i < numOfFigure; i++) {
-                Figure figure = (Figure) ois.readObject();
-                listOfFigure.add(figure);
-            }
-            System.out.println(listOfFigure);
-            for (int i = 0; i < listOfFigure.size(); i++) {
-                listOfFigure.get(i).draw(g);
-            }
-            ois.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public void setColor(Color color) {
@@ -78,6 +48,24 @@ public class Drawing extends JPanel implements MouseInputListener {
 
     public Point getEnd() {
         return end;
+    }
+
+    public void openFile(ArrayList<Figure> liste){
+        this.listOfFigure.clear(); // Supprime toutes les figures qui sont dans la liste au cas ou il y en a d'autre
+        listOfFigure = liste; // Remplace la liste des figures par celle chargé "liste"
+        paintComponent(this.getGraphics()); // Affiche les figures chargées
+    }
+
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        for (int i = 0; i < listOfFigure.size(); i++) { // Parcours les éléments de la liste listOfFigure
+            listOfFigure.get(i).draw(g); // Affiche chaque éléments de la "listOfFigure"
+        }
+    }
+
+    public void resetDrawing(){
+        this.listOfFigure.clear();
+        paintComponent(this.getGraphics());
     }
 
     @Override
@@ -114,28 +102,26 @@ public class Drawing extends JPanel implements MouseInputListener {
         if ((color != null) && (nextFigure != null) && (width != 0)){
             if (nextFigure == "Rectangle"){
                 Rectangle rectangle = new Rectangle(Math.abs(width),Math.abs(height),color,origin); // On créé un objet rectangle qui prend comme argument les paramètres de notre rectangle créé juste avant
-                rectangle.draw(g); // affichage du rectangle
+                // rectangle.draw(g); // Affichage du rectangle directement
                 listOfFigure.add(rectangle); // On ajoute ici la figure créée dans la liste de figure
             }
             
             if (nextFigure == "Carre"){
                 Square carre = new Square(Math.abs(width),color,origin); // Comme le rectangle
-                carre.draw(g); // affichage du carré
                 listOfFigure.add(carre);
             }
 
             if (nextFigure == "Ellipse"){
                 Ellipse ellipse = new Ellipse(Math.abs(width),Math.abs(height),color,origin); // Comme le rectangle
-                ellipse.draw(g);
                 listOfFigure.add(ellipse);
             }
 
             if (nextFigure == "Cercle"){
                 Circle cercle = new Circle(Math.abs(width),color,origin); // Comme le rectangle
-                cercle.draw(g);
                 listOfFigure.add(cercle);
             }
-            System.out.println("Figure :"+nextFigure+" / Couleur :"+color+" / Origine :"+origin);
+            // System.out.println("Figure :"+nextFigure+" / Couleur :"+color+" / Origine :"+origin);
+            paintComponent(this.getGraphics()); // Affichage de tous les éléments dans la liste listOfFigure
             System.out.println(listOfFigure);
         }       
     }
