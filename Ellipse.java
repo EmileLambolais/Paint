@@ -5,16 +5,19 @@ public class Ellipse extends Figure{
     public int height;
     public int heightBB=0;
     public int widthBB=0;
-    public Figure figure = null;
 
+
+    /*************************************************/
+    // Constructeur 1 : sans point d'origine
     public Ellipse(int px, int py, Color c){ // Création du constructeur pour l'objet Rectangle
         super(c, new Point(1,1));
         setSemiAxisX(px);
         setSemiAxisY(py);
         this.setBoundingBox(px, py);
-        this.draw(null);
     }
 
+    /*************************************************/
+    // Constructeur 2 : avec point d'origine
     public Ellipse(int px, int py, Color c, Point p){ // Création du constructeur pour l'objet Rectangle
         super(c, p);
         setSemiAxisX(px);
@@ -37,14 +40,8 @@ public class Ellipse extends Figure{
         this.height = height;
     }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
+    /*************************************************/
+    // Méthode d'affichage de l'ellipse
     @Override
     public void draw(Graphics g) {
         g.setColor(color);

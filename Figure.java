@@ -6,12 +6,16 @@ public abstract class Figure implements Serializable {
     public Color color;
     public Point origin;
 
-    public Figure(Color c, Point p){ // Constructeur pour l'objet "Figure" avec un point
+    /*************************************************/
+    // Constructeur 1 : avec couleur et point d'origine
+    public Figure(Color c, Point p){ 
         this.color = c;
         this.origin = p;
     }
 
-    public Figure(Color c){ // Constructeur pour l'objet "Figure" avec uniquement la couleur
+    /*************************************************/
+    // Constructeur 2 : avec couleur
+    public Figure(Color c){ 
         this.color = c;
     }
 
@@ -27,6 +31,3 @@ public abstract class Figure implements Serializable {
     }
 
 }
-
-
-
