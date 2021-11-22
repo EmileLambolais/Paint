@@ -97,13 +97,14 @@ public class Window extends JFrame {
             fichierMenu.insertSeparator(4); // Ajout d'un séparateur entre les deux items
             
             // Création d'un bouton Quitter
-            item = new JMenuItem("Quitter") ; // Création d'un item Quitter
-                item.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
+            JMenuItem itemQuit = new JMenuItem("Quitter") ; // Création d'un item Quitter
+            itemQuit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_DOWN_MASK));
+                itemQuit.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
                     public void actionPerformed(ActionEvent e){
                         System.exit(0);
                     }
                 });
-            fichierMenu.add(item); // On ajoute l'item Ouvrir dans le menu Fichier
+            fichierMenu.add(itemQuit); // On ajoute l'item Ouvrir dans le menu Fichier
             menuBar.add(fichierMenu); // On ajoute du menu Fichier dans la barre de menu
 
             /*************************************************/
