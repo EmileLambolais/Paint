@@ -1,4 +1,8 @@
 import java.awt.*;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -66,11 +70,42 @@ public class Drawing extends JPanel implements MouseInputListener {
 
     /*************************************************/
     // Méthode d'ouverture du fichier
-    public void openFile(ArrayList<Figure> liste){
+    public void openFile(String nameFile){
         this.listOfFigure.clear(); // Supprime toutes les figures qui sont dans la liste listOfFigure au cas ou il y en a d'autre
         this.listRestore.clear(); // Supprime toutes les figures qui sont dans la liste listRestore afin de ne pas interférer avec les précédentes créations
-        listOfFigure = liste; // Remplace la liste des figures par celle chargé "liste" lors de l'ouverture du fichier
+        try{
+            FileInputStream fis = new FileInputStream(nameFile);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            int numberOfFigure = ois.readInt();
+            for (int i = 0; i < numberOfFigure; i++) {
+                Figure figure = (Figure) ois.readObject();
+                listOfFigure.add(figure);
+            }
+            System.out.println(listOfFigure);
+            ois.close();
+        }
+        catch (Exception e2){
+           e2.printStackTrace();
+        }
         paintComponent(this.getGraphics()); // Affiche les figures chargées
+    }
+
+    /*************************************************/
+    // Méthode de sauvegarde du fichier
+    public void saveFile(String nameFile){
+        try{
+            FileOutputStream fos = new FileOutputStream(nameFile);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeInt(listOfFigure.size());
+            for (int i = 0; i < listOfFigure.size(); i++) {
+                oos.writeObject(listOfFigure.get(i));
+            }
+            oos.close();
+        }
+        catch (Exception e2){
+           e2.printStackTrace();
+        }
     }
 
     /*************************************************/

@@ -1,8 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.io.*;
-import java.util.ArrayList;
 
 public class Window extends JFrame {
     public Window(String Title,int x,int y){ // Création du constructeur qui créé une fenêtre
@@ -46,54 +44,23 @@ public class Window extends JFrame {
                     public void actionPerformed(ActionEvent e){
                         JFileChooser openFile = new JFileChooser("/Users/emilelambolais/Library/Mobile Documents/com~apple~CloudDocs/Documents/01_ENSEA/Cours/2A 2021-2022/01_Cours 2A 2021-2022/Informatique Java/Travaux Dirigés/Projet Java");
                         openFile.showOpenDialog(itemOpen);
-                        try{
-                            ArrayList<Figure> liste = new ArrayList<Figure>();
-                            String nameFile = openFile.getSelectedFile().getAbsolutePath();
-                            FileInputStream fis = new FileInputStream(nameFile);
-                            ObjectInputStream ois = new ObjectInputStream(fis);
-
-                            int numberOfFigure = ois.readInt();
-                            for (int i = 0; i < numberOfFigure; i++) {
-                                Figure figure = (Figure) ois.readObject();
-                                liste.add(figure);
-                            }
-                            System.out.println(liste);
-                            dessin.openFile(liste);
-                            ois.close();
-                        }
-                        catch (Exception e2){
-                           e2.printStackTrace();
-                        }
+                        String nameFile = openFile.getSelectedFile().getAbsolutePath();
+                        dessin.openFile(nameFile); // Ouverture du fichier
                     }
                 });
             fichierMenu.add(itemOpen); // On ajoute l'item Ouvrir dans le menu Fichier
 
             // Création d'un bouton Sauvegarder
             JMenuItem itemSave = new JMenuItem("Sauvegarder") ; // Création d'un item Sauvegarder
+            itemSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
                 itemSave.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
                     public void actionPerformed(ActionEvent e){
                         JFileChooser saveFile = new JFileChooser("/Users/emilelambolais/Library/Mobile Documents/com~apple~CloudDocs/Documents/01_ENSEA/Cours/2A 2021-2022/01_Cours 2A 2021-2022/Informatique Java/Travaux Dirigés/Projet Java");
                         saveFile.showSaveDialog(itemSave);
-                        try{
-                            ArrayList<Figure> liste = new ArrayList<Figure>();
-                            liste = dessin.getListOfFigure();
-                            String nameFile = saveFile.getSelectedFile().getAbsolutePath();
-                            FileOutputStream fos = new FileOutputStream(nameFile);
-                            ObjectOutputStream oos = new ObjectOutputStream(fos);
-
-                            oos.writeInt(liste.size());
-                            for (int i = 0; i < liste.size(); i++) {
-                                oos.writeObject(liste.get(i));
-                            }
-                            // System.out.println(liste);
-                            oos.close();
-                        }
-                        catch (Exception e2){
-                           e2.printStackTrace();
-                        }
+                        String nameFile = saveFile.getSelectedFile().getAbsolutePath();
+                        dessin.saveFile(nameFile); // Sauvegarde du fichier
                     }
                 });
-            itemSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
             fichierMenu.add(itemSave); // On ajoute l'item Ouvrir dans le menu Fichier
             fichierMenu.insertSeparator(4); // Ajout d'un séparateur entre les deux items
             
