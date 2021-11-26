@@ -11,6 +11,7 @@ public class Drawing extends JPanel implements MouseInputListener {
     public Point origin, end, origin2;
     public ArrayList<Figure> listOfFigure = new ArrayList<Figure>();
     public ArrayList<Figure> listDragged = new ArrayList<Figure>();
+    public ArrayList<Figure> listRestore = new ArrayList<Figure>();
 
     public Drawing(){
         this.addMouseListener(this);
@@ -45,10 +46,29 @@ public class Drawing extends JPanel implements MouseInputListener {
         return end;
     }
 
+    /**************************************************/
+    // Méthode pour annuler une figure créées
+    public void deletePreviousFigure() {
+        listRestore.add(listOfFigure.get(listOfFigure.size() - 1)); // Ajout du dernier éléments dans une listRestore qui stock les éléments annulées
+        listOfFigure.remove(listOfFigure.size() - 1); // suppression du dernier éléments de listOfFigure 
+        paintComponent(this.getGraphics()); // Réaffiche les éléments de la liste listOfFigure avec le dernier élément supprimé
+        System.out.println(listOfFigure);
+    }
+
+    /**************************************************/
+    // Méthode pour rétablir une figure annulées
+    public void restorePreviousFigure() {
+        listOfFigure.add(listRestore.get(listRestore.size() - 1)); // Ajout de la précédentes figures supprimées dans la listOfFigure afin de la faire réapparaitre
+        listRestore.remove(listRestore.size() - 1); // Suppréssion de la dernière figure dans listRestore afin de ne garder que les figures annulées dedans, et plus celles restaurés
+        paintComponent(this.getGraphics()); // Affiche les figures
+        System.out.println(listOfFigure);
+    }
+
     /*************************************************/
     // Méthode d'ouverture du fichier
     public void openFile(ArrayList<Figure> liste){
-        this.listOfFigure.clear(); // Supprime toutes les figures qui sont dans la liste au cas ou il y en a d'autre
+        this.listOfFigure.clear(); // Supprime toutes les figures qui sont dans la liste listOfFigure au cas ou il y en a d'autre
+        this.listRestore.clear(); // Supprime toutes les figures qui sont dans la liste listRestore afin de ne pas interférer avec les précédentes créations
         listOfFigure = liste; // Remplace la liste des figures par celle chargé "liste" lors de l'ouverture du fichier
         paintComponent(this.getGraphics()); // Affiche les figures chargées
     }
@@ -153,7 +173,7 @@ public class Drawing extends JPanel implements MouseInputListener {
 
         // Création des différents cas possibles (sens d'affichage)
         if ((e.getX()<origin.getX()) && (e.getY()<origin.getY())){origin2 = new Point(e.getX(),e.getY());} // Même méthode de raisonnement que dans le mouseRealesed
-        if ((e.getX()>origin.getX()) && (e.getY()>origin.getY())){origin2 = new Point(origin.getX(),origin.getY());}
+        if ((e.getX()>origin.getX()) && (e.getY()>origin.getY())){origin2 = origin;}
         if ((e.getX()<origin.getX()) && (e.getY()>origin.getY())){origin2 = new Point(e.getX(),origin.getY());}
         if ((e.getX()>origin.getX()) && (e.getY()<origin.getY())){origin2 = new Point(origin.getX(),e.getY());}
 

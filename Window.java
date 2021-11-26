@@ -115,6 +115,32 @@ public class Window extends JFrame {
             aproposCreateur.add(buttonCreateur); // ajout de l'item Nouveau au sous menu
             aproposMenu.add(aproposCreateur); // ajout du sous menu au menu A Propos
             menuBar.add(aproposMenu); // On ajoute du menu A propos dans la barre de menu
+
+            /*************************************************/
+            // Création du menu Actions
+            JMenu actions = new JMenu("Actions"); // Création d'un nouveau menu A Propos
+
+            // Création d'un bouton Annuler
+            JMenuItem cancel = new JMenuItem("Annuler");
+            cancel.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK)); // Raccourcis clavier CTRL A
+            cancel.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
+                    public void actionPerformed(ActionEvent e){
+                        dessin.deletePreviousFigure(); // supprime le dernier éléments ajoutés à la liste
+                    }
+                });
+            actions.add(cancel); // ajout du sous menu au menu Actions
+            menuBar.add(actions); // On ajoute du menu Actions dans la barre de menu
+
+            // Création d'un bouton Rétablir
+            JMenuItem restore = new JMenuItem("Rétablir");
+            restore.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK)); // Raccourcis clavier CTRL R
+            restore.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
+                    public void actionPerformed(ActionEvent e){
+                        dessin.restorePreviousFigure(); // supprime le dernier éléments ajoutés à la liste
+                    }
+                });
+            actions.add(restore); // ajout du sous menu au menu Actions
+            menuBar.add(actions); // On ajoute du menu Actions dans la barre de menu
             
             /*************************************************/
             // Création des boutons
