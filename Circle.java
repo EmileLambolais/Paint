@@ -1,30 +1,49 @@
+
 import java.awt.*;
 
-public class Circle extends Ellipse{
-     
-    public int px;
+/**
+ *
+ * @author Emile
+ */
+public class Circle extends Ellipse {
 
-    /*************************************************/
-    // Constructeur 1 : sans point d'origine
-    public Circle(int px, Color c){ // Constructeur du carré
-        super(px,px,c);
-        this.px = px;
+    /**
+     * Constucteur 1 : Création d'un disque sans point d'origine
+     *
+     * @param rayon : rayon en pixels
+     * @param c : couleur de l'intérieur du cercle
+     */
+    public Circle(int rayon, Color c) { // Constructeur du carré
+        super(rayon, rayon, c);
     }
 
-    /*************************************************/
-    // Constructeur 2 : avec point d'origine
-    public Circle(int px, Color c, Point point){ // Constructeur du carré avec un point d'origine
-        super(px,px,c,point);
-        this.px = px;
+    /**
+     * Constructeur 2 : Création d'un disque avec point d'origine
+     *
+     * @param rayon : rayon en pixels
+     * @param c : couleur de la surface du disque
+     * @param point : point d'origine en haut à gauche
+     */
+    public Circle(int rayon, Color c, Point point) { // Constructeur du carré avec un point d'origine
+        super(rayon, rayon, c, point);
     }
-    
-    public void setBoundingBox (int heightBB, int widthBB){
+
+    /**
+     * Définit la bounding box du disque.
+     *
+     * @param heightBB
+     * @param widthBB
+     */
+    public void setBoundingBox(int heightBB, int widthBB) {
         this.heightBB = heightBB;
         this.widthBB = heightBB;
     }
 
-    /*************************************************/
-    // Méthode d'affichage du cercle
+    /**
+     * Méthode d'affichage du cercle
+     *
+     * @param g
+     */
     @Override
     public void draw(Graphics g) {
         super.draw(g);

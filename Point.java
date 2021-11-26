@@ -1,44 +1,57 @@
+
 import java.io.Serializable;
 
+/**
+ *
+ * @author Emile
+ */
 public class Point implements Serializable {
 
-    private int X;
-    private int Y;
-    public static int totalNumberOfPoint;
+    private int x;
+    private int y;
+    public static int totalNumberOfPoints;
 
-    public Point(int X, int Y) { // Création du constructeur qui va permettre de créer tous types de points
-        setX(X);
-        setY(Y);
-        totalNumberOfPoint++;
+    /**
+     * Constructeur 1 : création d'un point de coodonnées x et y
+     *
+     * @param x entier
+     * @param y entier
+     */
+    public Point(int x, int y) { // Création du constructeur qui va permettre de créer tous types de points
+        setX(x);
+        setY(y);
+        totalNumberOfPoints++;
     }
-
+    /**
+     * Constructeur 2 : réinitailisation des coordonnées en (0,0)
+     */
     public Point() { // Création du constructeur qui va permettre de créer tous types de points
-        this.X = 0;
-        this.Y = 0;
+        this.x = 0;
+        this.y = 0;
     }
 
     public int getX() {
-        return X;
+        return x;
     }
 
     public int getY() {
-        return Y;
+        return y;
     }
 
     public void setX(int x) {
-        this.X = x;
+        this.x = x;
     }
 
     public void setY(int y) {
-        this.Y = y;
+        this.y = y;
     }
 
-    public void getTotalNumberOfPoint() {
-        System.out.println(totalNumberOfPoint);
+    public void getTotalNumberOfPoints() {
+        System.out.println(totalNumberOfPoints);
     }
 
     @Override
     public String toString() {
-        return "("+X+","+Y+")";
+        return "(" + x + "," + y + ")";
     }
 }
