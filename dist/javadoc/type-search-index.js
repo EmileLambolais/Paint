@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"<Unnamed>","l":"Circle"},{"p":"<Unnamed>","l":"Drawing"},{"p":"<Unnamed>","l":"Ellipse"},{"p":"<Unnamed>","l":"Figure"},{"p":"<Unnamed>","l":"Point"},{"p":"<Unnamed>","l":"Rectangle"},{"p":"<Unnamed>","l":"Square"},{"p":"<Unnamed>","l":"Window"}]
