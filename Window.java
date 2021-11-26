@@ -27,20 +27,21 @@ public class Window extends JFrame {
             /*************************************************/ 
             // Création du menu Fichier
             JMenu fichierMenu = new JMenu("Fichier"); // Création d'un nouveau menu File
-            JMenuItem item = null;
 
             // Création d'un bouton Nouveau
-            item = new JMenuItem("Nouveau"); // Création d'un item Nouveau
-                item.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
+            JMenuItem itemNew = new JMenuItem("Nouveau"); // Création d'un item Nouveau
+            itemNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
+                itemNew.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
                     public void actionPerformed(ActionEvent e){
                         dessin.resetDrawing();
                     }
                 });
-            fichierMenu.add(item); // ajout de l'item Nouveau au menu Fichier
+            fichierMenu.add(itemNew); // ajout de l'item Nouveau au menu Fichier
             fichierMenu.insertSeparator(1); // Ajout d'un séparateur entre les deux items
 
             // Création d'un bouton Ouvrir
             JMenuItem itemOpen = new JMenuItem("Ouvrir") ; // Création d'un item Ouvrir
+            itemOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
                 itemOpen.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
                     public void actionPerformed(ActionEvent e){
                         JFileChooser openFile = new JFileChooser("/Users/emilelambolais/Library/Mobile Documents/com~apple~CloudDocs/Documents/01_ENSEA/Cours/2A 2021-2022/01_Cours 2A 2021-2022/Informatique Java/Travaux Dirigés/Projet Java");
@@ -108,22 +109,13 @@ public class Window extends JFrame {
             menuBar.add(fichierMenu); // On ajoute du menu Fichier dans la barre de menu
 
             /*************************************************/
-            // Création du menu A Propos
-            JMenu aproposMenu = new JMenu("À Propos"); // Création d'un nouveau menu A Propos
-            JMenu aproposCreateur = new JMenu("Créateur"); // Création d'un nouveau sous menu Créateur
-            JMenuItem buttonCreateur = new JMenuItem("Emile LAMBOLAIS, ENSEA"); // Création d'un bouton créateur pour afficher le nom du créateur du programme
-            aproposCreateur.add(buttonCreateur); // ajout de l'item Nouveau au sous menu
-            aproposMenu.add(aproposCreateur); // ajout du sous menu au menu A Propos
-            menuBar.add(aproposMenu); // On ajoute du menu A propos dans la barre de menu
-
-            /*************************************************/
             // Création du menu Actions
             JMenu actions = new JMenu("Actions"); // Création d'un nouveau menu A Propos
 
             // Création d'un bouton Annuler
             JMenuItem cancel = new JMenuItem("Annuler");
             cancel.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK)); // Raccourcis clavier CTRL A
-            cancel.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
+                cancel.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
                     public void actionPerformed(ActionEvent e){
                         dessin.deletePreviousFigure(); // supprime le dernier éléments ajoutés à la liste
                     }
@@ -134,13 +126,22 @@ public class Window extends JFrame {
             // Création d'un bouton Rétablir
             JMenuItem restore = new JMenuItem("Rétablir");
             restore.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK)); // Raccourcis clavier CTRL R
-            restore.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
+                restore.addActionListener(new ActionListener(){ // Ajout d'une écoute d'action, et s'il y a une action alors cela actionne la tache demandée dans le actionPerformed
                     public void actionPerformed(ActionEvent e){
                         dessin.restorePreviousFigure(); // supprime le dernier éléments ajoutés à la liste
                     }
                 });
             actions.add(restore); // ajout du sous menu au menu Actions
             menuBar.add(actions); // On ajoute du menu Actions dans la barre de menu
+
+            /*************************************************/
+            // Création du menu A Propos
+            JMenu aproposMenu = new JMenu("À Propos"); // Création d'un nouveau menu A Propos
+            JMenu aproposCreateur = new JMenu("Créateur"); // Création d'un nouveau sous menu Créateur
+            JMenuItem buttonCreateur = new JMenuItem("Emile LAMBOLAIS, ENSEA"); // Création d'un bouton créateur pour afficher le nom du créateur du programme
+            aproposCreateur.add(buttonCreateur); // ajout de l'item Nouveau au sous menu
+            aproposMenu.add(aproposCreateur); // ajout du sous menu au menu A Propos
+            menuBar.add(aproposMenu); // On ajoute du menu A propos dans la barre de menu
             
             /*************************************************/
             // Création des boutons
